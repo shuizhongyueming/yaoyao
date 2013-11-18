@@ -5,24 +5,18 @@
     <title>demo</title>
 </head>
 <body>
-    <button id="btn">摇一摇</button>
-    <img id="img" />
-    <script src="http://www.7k7kjs.cn/js/lib/jquery/1.7.2/jquery-min.js"></script> 
-    <script type="text/javascript">
-    var offset = 13,
-        img = $('#img');
-    $('#btn').click(function(){
-        $.ajax({
-            url:'http://wx.7k7k.com:8080',
-            dataType:'jsonp',
-            type:'GET',
-            data:{type:1,offset:offset,set_no:1,num:1},
-            success:function(d){
-                offset++;
-                img.attr('src',"http://wx.7k7k.com/demo/yaoyao/img/"+d.data[0].url);
-            }
-        });
-    });
-    </script>
+<p>图片类型</p>
+<p><label for="fuli">福利图<input type="radio" checked="checked" id="fuli" name="type" value="1" /></label><label for="normal">正常图<input type="radio" id="normal" name="type" value="0" /></label></p>
+<p></p>
+<p>offset<input type="text" id="offset" /></p>
+<p>num<input type="text" id="num" /></p>
+<p>set_no<input type="text" id="setNo" /></p>
+<input type="button" id="btn" value="摇一摇" />
+
+
+<script src="http://www.7k7kjs.cn/js/lib/jquery/1.7.2/jquery-min.js"></script>
+<script type="text/javascript">
+    $('#btn').click();
+</script>
 </body>
 </html>
