@@ -10,10 +10,17 @@ var arrNormal = ["134L2Z3V44P.jpg","10058503.jpg","10070349.jpg","10130060.jpg",
 client.on('error',function(err){
     console.log('Error '+err);
 });
+/*
+client.ZADD('fuli','1','adfsadf.jpg');
+console.log('zadd finish');
+//client.end();
+*/
 
 for(i=0,len=arrNormal.length;i<len;i++){
 
-    client.ZADD('normal',i+1,arrNormal[i]);
+    client.ZADD('normal',i+1,arrNormal[i],function(err,reply){
+        console.log(reply);
+    });
 
     console.log('ZADD normal '+(i+1)+' '+arrNormal[i]);
 }
@@ -21,12 +28,15 @@ for(i=0,len=arrNormal.length;i<len;i++){
 
 for(i=0,len=arrFuli.length;i<len;i++){
 
-    client.ZADD('fuli',i+1,arrFuli[i]);
+    client.ZADD('fuli',i+1,arrFuli[i],function(err,reply){
+        console.log(reply);
+    });
 
     console.log('ZADD fuli '+(i+1)+' '+arrNormal[i]);
 
     if((i+1)==9){
-        client.end();
+        //client.end();
         console.log('ZADD finish');
     }
 }
+
