@@ -1,0 +1,28 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>demo</title>
+</head>
+<body>
+    <button id="btn">摇一摇</button>
+    <img id="img" />
+    <script src="http://www.7k7kjs.cn/js/lib/jquery/1.7.2/jquery-min.js"></script> 
+    <script type="text/javascript">
+    var offset = 13,
+        img = $('#img');
+    $('#btn').click(function(){
+        $.ajax({
+            url:'http://wx.7k7k.com:8080',
+            dataType:'jsonp',
+            type:'GET',
+            data:{type:1,offset:offset,set_no:1,num:1},
+            success:function(d){
+                offset++;
+                img.attr('src',"http://wx.7k7k.com/demo/yaoyao/img/"+d.data[0].url);
+            }
+        });
+    });
+    </script>
+</body>
+</html>
