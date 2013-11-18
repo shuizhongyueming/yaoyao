@@ -1,7 +1,7 @@
 var http = require('http'),
     url = require('url'),
     querystring = require("querystring"),
-    sql = require('./mysql');
+    sql = require('./redis');
     // queryString = require('queryString');
 
 http.createServer(function(request,response){
@@ -17,7 +17,7 @@ http.createServer(function(request,response){
         query = querystring.parse( url.parse(request.url).query ),
         type = query.type,
         offset = query.offset || 0,
-        num  = num || 1,
+        num  = query.num || 1,
         set_no = query.set_no,
         callback = query.callback;
 /**
@@ -27,6 +27,9 @@ http.createServer(function(request,response){
  * 
  */
     console.log('a query for pic is comming');
+
+    console.log('param into getPic: offset==>'+offset+' num==>'+num);
+
     sql.getPic(type,offset,num,response,function(result,response){
         var data = {};
         response.writeHead(200,{'Content-Type':'application/x-javascript'});
@@ -35,14 +38,22 @@ http.createServer(function(request,response){
             data.status = 0;
             data.data = '';
             data.set_no = set_no;
-            data.offset = offset;
+            data.offset = offset+num;
         }else{
             // 正常
+
+            // 返回的数量少了，说明以及循环一圈，可以从头再来了
+            if(result.length < num){
+                data.offset = 0;
+            }else{
+                data.offset = parseInt(offset,10) + parseInt(num,10);
+            }
+
             data.status = 1;
             data.data = result;
             data.set_no = set_no;
-            data.offset = parseInt(offset,10) + parseInt(num,10);
         }
+        data.type = type;
         if(callback){
             data = callback+'('+JSON.stringify(data)+')';
         }else{
