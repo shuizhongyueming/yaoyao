@@ -7,10 +7,10 @@ var mysql = require('mysql'),
     };
 var pool = mysql.createPool(db_pool_config);
 
+/*
 
 function getPic(type,offset,num,response,callback){
-    var /*connection = mysql.createConnection(db_config),*/
-        tableName = type === '1' ? 'fuli' : 'fengjing',
+    var tableName = type === '1' ? 'fuli' : 'normal',
         queryStr = 'SELECT url FROM '+tableName+' WHERE id > '+mysql.escape(offset)+' LIMIT '+mysql.escape(num);
     console.log(queryStr);
     pool.getConnection(function(err,connection){
@@ -30,6 +30,8 @@ function getPic(type,offset,num,response,callback){
 
 exports.getPic = getPic;
 
+*/
+
 pool.on('error',function(err){
     if(err){
         console.log('Connect MySQL with error: '+err.message);
@@ -37,6 +39,12 @@ pool.on('error',function(err){
     }
 });
 
+function getDataByTime(type,beginTime,endTime,callback){
+     var tableName = type === '1' ? 'fuli' : 'normal',
+         queryStr = 'SELECT url FROM '+tableName+' WHERE id > '+mysql.escape(offset)+' LIMIT '+mysql.escape(num);
+}
+
+exports.getDataByTime = getDataByTime;
 /*
 function getNormalPic(offset,response,callback){
     var connection = mysql.createConnection(db_config);
