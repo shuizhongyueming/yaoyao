@@ -34,24 +34,40 @@ exports.getPic = getPic;
 
 */
 // console.log(pool);
+
+connection.connect();
+
 function getDataByTime(type,beginTime,endTime,callback){
     var tableName = type === '1' ? 'fuli' : 'normal',
-        queryStr = 'SELECT url FROM '+tableName+' WHERE UNIX_TIMESTAMP(upTime) BETWEEN '+mysql.escape(beginTime)+' AND  '+mysql.escape(endTime);
+        queryStr = 'SELECT id,url FROM '+tableName+' WHERE UNIX_TIMESTAMP(upTime) BETWEEN '+mysql.escape(beginTime)+' AND  '+mysql.escape(endTime);
 
-    connection.connect();
+    console.log(queryStr);
+
 
     connection.query(queryStr,function(err,result){
        if(err){
-           console.log(err.message);
+           console.log(err);
            return;
        }
-       callback(result);
-       connection.end();
+       callback(result,connection);
    });
 
 }
 
+connection.on('error',function(err){
+    console.log(err);
+});
+
 exports.getDataByTime = getDataByTime;
+
+/*
+connection.connect();
+connection.query('SELECT id,url FROM fuli',function(err,result){
+    console.log(result);
+    connection.end();
+});
+*/
+
 
 /*
 function getNormalPic(offset,response,callback){

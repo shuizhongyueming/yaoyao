@@ -25,6 +25,19 @@ function getPic(type,offset,num,response,callback){
 
 exports.getPic = getPic;
 
+
+function insertPic(type,score,value,callback){
+    var setName = type === '1' ? 'fuli' : 'normal';
+
+    console.log('ZADD '+setName+' '+score+' '+value);
+
+    redis.ZADD(setName,score,value,function(){
+        typeof callback === 'function' && callback(redis);        
+    });
+}
+
+exports.insertPic = insertPic;
+
 redis.on('error',function(err){
     if(err){
         console.log('Error: '+err.message);

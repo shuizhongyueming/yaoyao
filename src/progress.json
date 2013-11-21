@@ -1,4 +1,14 @@
 {
-  "isProgressing": true,
-  "lastProgressTime": 1384823661202
+  "0": {
+    "picType":"0",
+    "isProgressing": false,
+    "lastProgressTime": 1384430235,
+    "timeSelectRange": 3600
+  },
+  "1": {
+    "picType":"1",
+    "isProgressing": false,
+    "lastProgressTime": 1384430352,
+    "timeSelectRange": 3600
+  }
 }
