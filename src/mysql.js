@@ -1,11 +1,13 @@
 var mysql = require('mysql'),
-    db_pool_config = {
-        host:'localhost',
+    db_config = {
+        host:'192.168.5.64',
         user:'root',
         password:'root',
         database:'yaoyao'
     };
-var pool = mysql.createPool(db_pool_config);
+var connection = mysql.createConnection(db_config);
+
+
 
 /*
 
@@ -31,20 +33,26 @@ function getPic(type,offset,num,response,callback){
 exports.getPic = getPic;
 
 */
-
-pool.on('error',function(err){
-    if(err){
-        console.log('Connect MySQL with error: '+err.message);
-        return;
-    }
-});
-
+// console.log(pool);
 function getDataByTime(type,beginTime,endTime,callback){
-     var tableName = type === '1' ? 'fuli' : 'normal',
-         queryStr = 'SELECT url FROM '+tableName+' WHERE id > '+mysql.escape(offset)+' LIMIT '+mysql.escape(num);
+    var tableName = type === '1' ? 'fuli' : 'normal',
+        queryStr = 'SELECT url FROM '+tableName+' WHERE UNIX_TIMESTAMP(upTime) BETWEEN '+mysql.escape(beginTime)+' AND  '+mysql.escape(endTime);
+
+    connection.connect();
+
+    connection.query(queryStr,function(err,result){
+       if(err){
+           console.log(err.message);
+           return;
+       }
+       callback(result);
+       connection.end();
+   });
+
 }
 
 exports.getDataByTime = getDataByTime;
+
 /*
 function getNormalPic(offset,response,callback){
     var connection = mysql.createConnection(db_config);
