@@ -2,11 +2,11 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <title>demo</title>
+    <title>摇摇测试界面</title>
 </head>
 <body>
 <p>图片类型</p>
-<p><label for="fuli">福利图<input type="radio" checked="checked" id="fuli" name="type" value="1" /></label><label for="normal">正常图<input type="radio" id="normal" name="type" value="0" /></label></p>
+<p><label for="normal">正常图<input type="radio" id="normal" name="type" value="0" /></label><label for="fuli">福利图<input type="radio" checked="checked" id="fuli" name="type" value="1" /></label></p>
 <p></p>
 <p>offset<input type="text" id="offset" /></p>
 <p>num<input type="text" id="num" /></p>
@@ -16,7 +16,44 @@
 
 <script src="http://www.7k7kjs.cn/js/lib/jquery/1.7.2/jquery-min.js"></script>
 <script type="text/javascript">
-    $('#btn').click();
+    $('#btn').click(function(){
+        var type = $('input[name=type]:checked').val(),
+            offset = $('#offset').val(),
+            num = $('#num').val(),
+            set_no = $('#setNo').val();
+
+        $.ajax({
+            url:'http://192.168.5.100:8080/',
+            type:'GET',
+            data:{type:type,offset:offset,num:num,set_no:set_no},
+            dataType:'jsonp',
+            success:function(d){
+                var i,arr=[],baseSrc;
+                if(parseInt(d.status,10) === 1){
+                    
+                    if(parseInt(d.type,10) === 1){
+                        baseSrc='./fuli/';
+                    }else{
+                        baseSrc='./normal/';
+                    }
+
+                    for(i in d.data){
+                        arr[i] = '<img width="320" height="480" src="'+baseSrc+d.data[i]+'" />';
+                    }
+
+                    $('img').each(function(i,n){
+                        $(n).remove();
+                    });
+                    $('body').append(arr.join(''));
+
+                    $('input[name=type]').eq(d.type).attr('checked','checked');
+                    $('#offset').val(d.offset);
+                    $('#num').val(d.num);
+                    $('#setNo').val(d.set_no);
+                }
+            }
+        });
+    });
 </script>
 </body>
 </html>
